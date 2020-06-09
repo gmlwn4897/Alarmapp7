@@ -28,6 +28,10 @@
         </receiver>
 
         <receiver android:name=".AlarmReceiver"/>
+
+        <activity android:name=".SetAlarm">
+        </activity>
+
     </application>
 
 </manifest>

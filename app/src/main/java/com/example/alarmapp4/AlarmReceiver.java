@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.PowerManager;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
@@ -24,7 +25,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         //mainactivity에서 notificationId와 text를 가져오기.
         int notificationId = intent.getIntExtra("notificationId",0);
-        String text = intent.getStringExtra("todo");
+        String text = intent.getStringExtra("drug");
 
         NotificationManager notificationManager =(NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent notificationIntent = new Intent(context, MainActivity.class);
@@ -67,9 +68,15 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 
             if(notificationManager !=null){
-                notificationManager.notify(notificationId,builder.build());
 
-                Calendar nextNotifyTime = Calendar.getInstance();
+                PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+                PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "My:Tag"
+                );
+                wakeLock.acquire(5000);
+                notificationManager.notify(notificationId, builder.build());
+
+
+            /*    Calendar nextNotifyTime = Calendar.getInstance();
 
                 nextNotifyTime.add(Calendar.DATE,1);
 
@@ -81,7 +88,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 Date currentDateTime = nextNotifyTime.getTime();
                 String date_next = new SimpleDateFormat("yyyy년 MM월 dd일 EE요일 hh시 mm분", Locale.getDefault()).format(currentDateTime);
                 Toast.makeText(context.getApplicationContext(),"다음 알림은"+date_next+"으로 설정되었습니다.", Toast.LENGTH_SHORT).show();
-
+*/
             }
 
 
